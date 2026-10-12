@@ -1,0 +1,28 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- Generated pipeline / ML artifacts (rebuild with: python run_all.py) ---
+artifacts/
+!artifacts/.gitkeep
+
+# --- Backend runtime ---
+backend/users.json
+.env
+*.log
+
+# --- Frontend ---
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# --- OS / editors ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

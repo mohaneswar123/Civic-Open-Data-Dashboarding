@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/* Design tokens. Chart colours follow the validated reference palette
+   (categorical order is the colour-blind-safety mechanism - do not reorder). */
+:root {
+  color-scheme: light;
+  --page: #f6f6f3;
+  --surface: #fcfcfb;
+  --surface-2: #f0efec;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #6f6d68;
+  --line: #e1e0d9;
+  --axis: #c3c2b7;
+  --accent: #2a78d6;
+  --accent-ink: #ffffff;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --s5: #e87ba4; --s6: #008300; --s7: #6250d6; --s8: #e34948;
+  --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
+  --good-ink: #006300;
+  --div-neg: #e34948; --div-mid: #f0efec; --div-pos: #2a78d6;
+  --seq-1: #cde2fb; --seq-2: #9ec5f4; --seq-3: #6da7ec; --seq-4: #3987e5; --seq-5: #256abf; --seq-6: #184f95; --seq-7: #0d366b;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232321;
+    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #9a988f; --line: #2c2c2a; --axis: #383835;
+    --accent: #3987e5; --accent-ink: #ffffff;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+    --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+    --good-ink: #0ca30c; --div-mid: #383835;
+    --seq-1: #0d366b; --seq-2: #184f95; --seq-3: #256abf; --seq-4: #3987e5; --seq-5: #6da7ec; --seq-6: #9ec5f4; --seq-7: #cde2fb;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232321;
+  --ink: #f0efec; --ink-2: #c3c2b7; --muted: #9a988f; --line: #2c2c2a; --axis: #383835;
+  --accent: #3987e5; --accent-ink: #ffffff;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+  --good-ink: #0ca30c; --div-mid: #383835;
+  --seq-1: #0d366b; --seq-2: #184f95; --seq-3: #256abf; --seq-4: #3987e5; --seq-5: #6da7ec; --seq-6: #9ec5f4; --seq-7: #cde2fb;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-good: var(--good-ink);
+  --color-critical: var(--critical);
+  --color-warning: var(--warning);
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+
+html, body { background: var(--page); color: var(--ink); }
+body { margin: 0; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Recharts chrome: recessive hairlines and muted axis text. */
+.recharts-cartesian-grid line { stroke: var(--line); }
+.recharts-cartesian-axis-line, .recharts-cartesian-axis-tick-line { stroke: var(--axis); }
+.recharts-cartesian-axis-tick-value { fill: var(--muted); font-size: 12px; }
+.recharts-legend-item-text { color: var(--ink-2) !important; font-size: 12px; }
+.recharts-default-tooltip { background: var(--surface) !important; border: 1px solid var(--line) !important;
+  border-radius: 8px; box-shadow: 0 4px 16px rgb(0 0 0 / 0.08); color: var(--ink); font-size: 12px; }
+.recharts-tooltip-label { color: var(--ink) !important; font-weight: 600; margin-bottom: 4px; }
+.recharts-tooltip-item { color: var(--ink-2) !important; }
+.recharts-tooltip-cursor { fill: var(--surface-2); }
+
+/* highlight.js theme driven by tokens (works in light and dark). */
+.hljs { color: var(--ink); background: transparent; }
+.hljs-keyword, .hljs-built_in, .hljs-literal { color: var(--s7); }
+.hljs-string, .hljs-doctag { color: var(--s6); }
+.hljs-comment { color: var(--muted); font-style: italic; }
+.hljs-number { color: var(--s2); }
+.hljs-title, .hljs-title.function_, .hljs-title.class_ { color: var(--s1); }
+.hljs-meta, .hljs-decorator { color: var(--s5); }
+.hljs-params { color: var(--ink-2); }
