@@ -16,8 +16,8 @@ export default function Login() {
     e.preventDefault()
     setBusy(true); setError(null)
     try {
-      const u = await login(username, password)
-      nav(u.role === 'admin' ? '/admin/architecture' : '/advanced')
+      await login(username, password)
+      nav('/problem')
     } catch (err) {
       setError((err as Error).message)
     } finally { setBusy(false) }

@@ -134,3 +134,48 @@ def test_published_crop_totals_match_independent_oracle(client):
     published = {r["year"]: r["production_t"] for r in client.get("/api/public/crop").json()["yearly"]}
     for year, value in oracle.items():
         assert published[year] == pytest.approx(value, rel=1e-9), year
+
+
+# ------------------------------------------------------------------ insight pages (shared by every role)
+@pytest.mark.parametrize("path", ["/api/insights/brief", "/api/insights/eda/crop", "/api/insights/classifiers",
+                                  "/api/insights/classifiers/diabetes", "/api/insights/classifiers/suicides/options"])
+def test_insights_are_open_to_every_role(client, policy, admin, path):
+    assert client.get(path).status_code == 200
+    assert client.get(path, headers=policy).status_code == 200
+    assert client.get(path, headers=admin).status_code == 200
+
+
+def test_admin_tools_stay_admin_only(client, policy, admin):
+    assert client.get("/api/admin/datasets").status_code == 401
+    assert client.get("/api/admin/datasets", headers=policy).status_code == 403
+    assert client.get("/api/admin/datasets", headers=admin).status_code == 200
+
+
+def test_every_task_has_a_selected_model_with_reasons(client, admin):
+    for card in client.get("/api/insights/classifiers", headers=admin).json():
+        rep = client.get(f"/api/insights/classifiers/{card['task']}", headers=admin).json()
+        k = len(rep["class_names"])
+        verdicts = [m["verdict"] for m in rep["models"]]
+        assert verdicts.count("Selected") == 1 and rep["selected"] in [m["model"] for m in rep["models"]]
+        best = max(rep["models"], key=lambda m: m["validation"]["macro_f1"])
+        assert best["model"] == rep["selected"]  # selection rule: best validation macro-F1
+        for m in rep["models"]:
+            assert m["reasons"] and len(m["test"]["confusion"]) == k
+
+
+@pytest.mark.parametrize("task,inputs", [
+    ("crop_yield", {"state": "Punjab", "district": "Ludhiana", "crop": "Wheat", "season": "Rabi", "area_ha": 500, "year": 2014}),
+    ("diabetes", {"gender": "Female", "age": 30, "hypertension": 0, "heart_disease": 0, "smoking_history": "never",
+                  "bmi": 22, "HbA1c_level": 5.0, "blood_glucose_level": 100}),
+    ("weather_temp", {"city": "Delhi", "date": "2024-05-20"}),
+    ("weather_rain", {"city": "Mumbai", "date": "2024-07-10"}),
+    ("suicides", {"state": "Kerala", "gender": "Female", "age_group": "15-29", "year": 2011}),
+])
+def test_class_prediction_returns_label_only(client, admin, task, inputs):
+    opts = client.get(f"/api/insights/classifiers/{task}/options", headers=admin).json()
+    for model in opts["models"]:
+        r = client.post(f"/api/insights/classifiers/{task}/predict", json={"model": model, "inputs": inputs}, headers=admin)
+        assert r.status_code == 200, r.text
+        body = r.json()
+        assert body["label"] in opts["classes"]
+        assert set(body) == {"label", "model", "is_selected_model", "classes"}  # no numeric value or probability

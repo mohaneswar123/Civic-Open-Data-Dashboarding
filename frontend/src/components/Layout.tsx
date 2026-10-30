@@ -1,25 +1,23 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
-  BarChart3, Boxes, BrainCircuit, Code2, Database, FileText, Gauge, Home, LogIn, LogOut, Menu, Moon,
-  Network, ScrollText, ShieldCheck, Sun, X, type LucideIcon,
+  Boxes, Code2, Cpu, Database, LineChart, Table2, Target, FileText, LogIn, LogOut, Menu, Moon,
+  Network, ScrollText, Sun, X, type LucideIcon,
 } from 'lucide-react'
 import { hasRole, ROLE_LABEL, useAuth, type Role } from '../lib/auth'
 import { useApi, useLocalState } from '../lib/hooks'
 
 interface NavItem { to: string; label: string; icon: LucideIcon; role: Role }
+// The project pages are shown to every role; admins additionally get the admin tools.
 const NAV: { section: string; items: NavItem[] }[] = [
-  { section: 'Explore', items: [
-    { to: '/', label: 'Problem & overview', icon: Home, role: 'public' },
-    { to: '/dashboards', label: 'Dashboards', icon: BarChart3, role: 'public' },
-    { to: '/predictions', label: 'Predictions', icon: BrainCircuit, role: 'public' },
-    { to: '/models', label: 'Model transparency', icon: Gauge, role: 'public' },
+  { section: 'Project', items: [
+    { to: '/problem', label: 'Problem statement', icon: Target, role: 'public' },
+    { to: '/data', label: 'Datasets', icon: Table2, role: 'public' },
+    { to: '/eda', label: 'EDA visualisations', icon: LineChart, role: 'public' },
+    { to: '/about-models', label: 'About models', icon: Cpu, role: 'public' },
+    { to: '/architecture', label: 'System architecture', icon: Network, role: 'public' },
   ] },
-  { section: 'Policy makers', items: [
-    { to: '/advanced', label: 'Advanced analytics', icon: ShieldCheck, role: 'policy' },
-  ] },
-  { section: 'Administration', items: [
-    { to: '/admin/architecture', label: 'System architecture', icon: Network, role: 'admin' },
+  { section: 'Admin tools', items: [
     { to: '/admin/datasets', label: 'Datasets & lineage', icon: Database, role: 'admin' },
     { to: '/admin/project', label: 'Project info', icon: FileText, role: 'admin' },
     { to: '/admin/code', label: 'Python code', icon: Code2, role: 'admin' },
@@ -56,7 +54,7 @@ export default function Layout() {
 
   const sidebar = (
     <nav className="flex h-full flex-col gap-6 overflow-y-auto p-4">
-      <Link to="/" className="flex items-center gap-2.5 px-2">
+      <Link to="/problem" className="flex items-center gap-2.5 px-2">
         <span className="grid h-8 w-8 place-items-center rounded-lg bg-accent text-accent-ink"><Boxes size={17} /></span>
         <span className="leading-tight">
           <span className="block text-sm font-semibold text-ink">Civic Open-Data</span>

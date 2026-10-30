@@ -12,7 +12,7 @@ if str(settings.ROOT) not in sys.path:
     sys.path.insert(0, str(settings.ROOT))
 
 from . import auth, db, telemetry  # noqa: E402
-from .routers import admin, policy, predict, public  # noqa: E402
+from .routers import admin, insights, policy, predict, public  # noqa: E402
 
 app = FastAPI(title="Civic Open-Data Dashboard API", version="1.0.0",
               description="Public accountability dashboard - crop, rainfall, suicides, diabetes and weather data.")
@@ -20,7 +20,7 @@ app.add_middleware(telemetry.TelemetryMiddleware)
 app.add_middleware(CORSMiddleware, allow_origins=settings.CORS_ORIGINS, allow_credentials=True,
                    allow_methods=["*"], allow_headers=["*"])
 
-for r in (auth.router, public.router, policy.router, predict.router, admin.router):
+for r in (auth.router, public.router, policy.router, predict.router, admin.router, insights.router):
     app.include_router(r)
 
 

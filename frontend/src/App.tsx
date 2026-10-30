@@ -15,6 +15,10 @@ const Datasets = lazy(() => import('./pages/admin/Datasets'))
 const ProjectInfo = lazy(() => import('./pages/admin/ProjectInfo'))
 const Code = lazy(() => import('./pages/admin/Code'))
 const Operations = lazy(() => import('./pages/admin/Operations'))
+const ProblemStatement = lazy(() => import('./pages/admin/ProblemStatement'))
+const DatasetsBrief = lazy(() => import('./pages/admin/DatasetsBrief'))
+const Eda = lazy(() => import('./pages/admin/Eda'))
+const AboutModels = lazy(() => import('./pages/admin/AboutModels'))
 
 /** UI guard for navigation only - the API enforces the same roles server-side. */
 function RequireRole({ role, children }: { role: Role; children: ReactNode }) {
@@ -24,6 +28,11 @@ function RequireRole({ role, children }: { role: Role; children: ReactNode }) {
   return <>{children}</>
 }
 
+/** Every role starts on the Problem statement page. */
+function HomeOrAdmin() {
+  return <Navigate to="/problem" replace />
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -31,14 +40,19 @@ export default function App() {
         <Suspense fallback={<Loading />}>
           <Routes>
             <Route element={<Layout />}>
-              <Route index element={<Home />} />
+              <Route index element={<HomeOrAdmin />} />
               <Route path="login" element={<Login />} />
               <Route path="dashboards" element={<Dashboards />} />
               <Route path="predictions" element={<Predictions />} />
               <Route path="models" element={<Models />} />
               <Route path="advanced" element={<RequireRole role="policy"><Advanced /></RequireRole>} />
+              <Route path="problem" element={<ProblemStatement />} />
+              <Route path="data" element={<DatasetsBrief />} />
+              <Route path="eda" element={<Eda />} />
+              <Route path="about-models" element={<AboutModels />} />
+              <Route path="architecture" element={<Architecture />} />
+              <Route path="home" element={<Home />} />
               <Route path="admin">
-                <Route path="architecture" element={<RequireRole role="admin"><Architecture /></RequireRole>} />
                 <Route path="datasets" element={<RequireRole role="admin"><Datasets /></RequireRole>} />
                 <Route path="project" element={<RequireRole role="admin"><ProjectInfo /></RequireRole>} />
                 <Route path="code" element={<RequireRole role="admin"><Code /></RequireRole>} />

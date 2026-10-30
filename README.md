@@ -29,9 +29,9 @@ and `CIVIC_ADMIN_PASSWORD` environment variables):
 
 | Role | Username | Password | Sees |
 |---|---|---|---|
-| Public | (no login) | | General dashboards, predictions, model transparency |
-| Policy maker | `policy` | `policy@123` | Everything Public sees, plus advanced analytics, uncertainty intervals, scenarios, explanations and full model reports |
-| Admin | `admin` | `admin@123` | Everything above, plus system architecture, datasets and lineage, project spec, Python code (read-only) and operations |
+| Public | (no login) | | Problem statement, datasets, EDA visualisations, about models (class predictions), system architecture |
+| Policy maker | `policy` | `policy@123` | The same five pages as Public |
+| Admin | `admin` | `admin@123` | The same five pages, plus admin tools: datasets and lineage, project info, Python code (read-only) and operations |
 
 Set `CIVIC_JWT_SECRET` to a long random value for anything beyond a local demo.
 

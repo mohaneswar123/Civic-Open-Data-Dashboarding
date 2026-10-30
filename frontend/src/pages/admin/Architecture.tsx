@@ -57,7 +57,7 @@ export default function Architecture() {
         </Lane>
         <Arrow down label="joblib bundles + JSON reports" />
         <Lane title="3 · Serving: FastAPI (uvicorn) and React (Vite)">
-          <Box kind="API" title="FastAPI backend" tone="var(--s7)" items={['/api/public/* (anyone)', '/api/policy/* (policy+)', '/api/admin/* (admin)', '/api/predict/* (role-aware detail)', '/api/health (degraded flag)']} />
+          <Box kind="API" title="FastAPI backend" tone="var(--s7)" items={['/api/public/* (anyone)', '/api/insights/* (anyone)', '/api/policy/* (policy+)', '/api/admin/* (admin)', '/api/predict/* (role-aware detail)', '/api/health (degraded flag)']} />
           <Arrow />
           <Box kind="Security" title="JWT + RBAC" tone="var(--s8)" items={['bcrypt password hashes', 'role checked on every request', '401 / 403 responses', 'code viewer path allow-list']} />
           <Arrow />
